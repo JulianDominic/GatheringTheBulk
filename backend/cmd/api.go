@@ -19,6 +19,7 @@ func (app *api) mount() http.Handler {
 	// middleware
 	middlewares := []func(http.Handler) http.Handler{
 		middleware.LoggingMiddleware, // this comes first
+		middleware.RecoveryMiddleware,
 	}
 
 	var wrappedHandler http.Handler = mux
