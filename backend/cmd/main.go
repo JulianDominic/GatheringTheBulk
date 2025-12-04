@@ -7,6 +7,7 @@ import (
 
 	"github.com/JulianDominic/GatheringTheBulk/internal/constants"
 	"github.com/JulianDominic/GatheringTheBulk/internal/env"
+	"github.com/JulianDominic/GatheringTheBulk/internal/scryfall"
 	_ "modernc.org/sqlite"
 )
 
@@ -38,6 +39,12 @@ func main() {
 		os.Exit(constants.EXT_ERR_DB_CONNECT)
 	}
 	slog.Info("Connected to DB", "dsn", cfg.db.dsn)
+
+	// scryfall
+	sfallRepo := scryfall.NewScryfallRepo(db)
+	sfallService := scryfall.NewScryfallService(sfallRepo)
+	sfallService.PullMasterData()
+	slog.Info("DB has been initialised")
 
 	if err := api.run(api.mount()); err != nil {
 		slog.Error("Failed to start the server", "error", err)
