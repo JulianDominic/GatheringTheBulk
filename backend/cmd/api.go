@@ -52,4 +52,10 @@ type api struct {
 
 type config struct {
 	addr string // 10800
+	db   dbConfig
+}
+
+type dbConfig struct {
+	// data source name
+	dsn string
 }
