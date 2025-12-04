@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/JulianDominic/GatheringTheBulk/internal/handlers"
+	"github.com/JulianDominic/GatheringTheBulk/internal/healthcheck"
 	"github.com/JulianDominic/GatheringTheBulk/internal/middleware"
 )
 
@@ -14,7 +14,7 @@ func (app *api) mount() http.Handler {
 	mux := http.NewServeMux()
 
 	// handlers
-	mux.HandleFunc("GET /health", handlers.HealthCheckHandler)
+	mux.HandleFunc("GET /health", healthcheck.HealthCheckHandler)
 
 	// middleware
 	middlewares := []func(http.Handler) http.Handler{
