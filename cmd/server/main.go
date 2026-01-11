@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/JulianDominic/GatheringTheBulk/internal/api/common"
@@ -17,7 +18,11 @@ import (
 
 func main() {
 	// 1. Initialize DB
-	if err := database.InitDB("inventory.db"); err != nil {
+	dsn := os.Getenv("DATABASE_DSN")
+	if dsn == "" {
+		dsn = "inventory.db"
+	}
+	if err := database.InitDB(dsn); err != nil {
 		log.Fatalf("Failed to init DB: %v", err)
 	}
 	defer database.Close()
@@ -66,12 +71,16 @@ func main() {
 	mux.HandleFunc("GET /api/review/badge", reviewHandler.HandleBadge)
 
 	// 5. Start Server
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":" + port,
 		Handler: loggingMiddleware(mux),
 	}
 
-	log.Println("Server starting on http://localhost:8080")
+	log.Printf("Server starting on http://localhost:%s", port)
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatal(err)
 	}

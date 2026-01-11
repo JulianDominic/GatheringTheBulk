@@ -1,0 +1,17 @@
+services:
+  GTB:
+    container_name: GatheringTheBulk
+    build: .
+    ports:
+      - "10015:8080"
+    environment:
+      - PORT=8080
+      - DATABASE_DSN=/app/data/inventory.db
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+
+volumes:
+  data:
+  uploads:
