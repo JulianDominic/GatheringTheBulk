@@ -1,0 +1,39 @@
+<article id="review-queue-container">
+    {{if .Items}}
+    <div class="table-responsive">
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Issue</th>
+                    <th>Imported Data</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="review-table-body">
+                {{range .Items}}
+                <tr id="review-row-{{.ID}}">
+                    <td><mark>{{.IssueType}}</mark></td>
+                    <td>
+                        <small>
+                            {{.RawData}}
+                        </small>
+                    </td>
+                    <td>
+                        <button class="outline" hx-get="/review/resolve/{{.ID}}"
+                            hx-target="#resolve-modal">Resolve</button>
+                        <button class="outline secondary" hx-delete="/review/{{.ID}}" hx-target="#review-tab"
+                            hx-swap="innerHTML">Discard</button>
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+    {{else}}
+    <div style="text-align:center; padding:3rem;">
+        <h3>All Clear!</h3>
+        <p>No items in the review queue.</p>
+        <a href="/" role="button">Go to Dashboard</a>
+    </div>
+    {{end}}
+</article>

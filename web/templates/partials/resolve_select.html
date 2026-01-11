@@ -1,0 +1,26 @@
+<div style="margin-top:1.5rem; display:flex; flex-direction:column; align-items:center; gap:1.5rem;">
+    <!-- Large Card Preview -->
+    <div style="text-align:center;">
+        <img src="{{.ImageURI}}"
+            style="max-height:400px; width:auto; border-radius:var(--radius-md); box-shadow:var(--shadow-lg); display:block; margin: 0 auto 1rem;">
+        <span style="color:var(--text-secondary); font-size:0.9rem;">
+            Selected: <strong style="color:var(--text-primary);">{{.Name}} </strong>
+            <span style="text-transform: uppercase;">({{.SetCode}} #{{.CollectorNumber}})</span>
+        </span>
+    </div>
+
+    <!-- Confirmation Action -->
+    <div
+        style="width:100%; border-top:1px solid var(--border-color); padding-top:1.5rem; display:flex; justify-content:center; align-items:center; gap:1.5rem;">
+        <form hx-post="/review/resolve" hx-target="#review-tab" hx-swap="innerHTML" style="margin:0;"
+            hx-on:htmx:after-request="if(event.detail.successful) { document.getElementById('resolve-modal').close(); }">
+            <input type="hidden" name="queue_id" value="{{.QueueID}}">
+            <input type="hidden" name="scryfall_id" value="{{.ScryfallID}}">
+            <input type="hidden" name="quantity" value="{{.Quantity}}">
+            <input type="hidden" name="condition" value="{{.Condition}}">
+            <input type="hidden" name="is_foil" value="{{.IsFoil}}">
+            <input type="hidden" name="language" value="{{.Language}}">
+            <button type="submit" style="padding: 0.75rem 2rem;">Confirm &amp; Add to Inventory</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<article>
+    <header style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="margin-bottom: 0;">Resolve Item</h3>
+        <button onclick="document.getElementById('resolve-modal').close()"
+            style="border:none; background:none; cursor:pointer; font-size:0.9rem; padding:0.5rem; color:var(--text-secondary); width:auto; height:auto; text-decoration:underline;">Close</button>
+    </header>
+
+    <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+        <!-- Left Column: Reference Info -->
+        <div style="width: 200px; flex-shrink: 0;">
+            <h6
+                style="margin-bottom:0.5rem; text-transform:uppercase; font-size:0.7rem; letter-spacing:1px; color:var(--text-secondary);">
+                Imported Data</h6>
+            <div id="res-raw-data"
+                style="border: 1px solid var(--border-color); border-radius:var(--radius-sm); overflow:hidden; background:var(--bg-color);">
+                <table class="striped" style="margin-bottom:0; font-size:0.8rem;">
+                    <tbody>
+                        {{range $k, $v := .RawDataMap}}
+                        {{if $v}}
+                        <tr>
+                            <td style="padding:0.4rem; color:var(--text-secondary);"><strong>{{$k}}</strong></td>
+                            <td style="padding:0.4rem; color:var(--text-primary);">{{$v}}</td>
+                        </tr>
+                        {{end}}
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Right Column: Search & Match -->
+        <div style="flex-grow: 1;">
+            <h6 style="margin-bottom:0.5rem; text-transform:uppercase; font-size:0.75rem; letter-spacing:1px;">Find
+                Match</h6>
+
+            <input type="hidden" id="res-queue-id" value="{{.ID}}">
+            <input type="hidden" id="res-qty" value="{{.ProposedValuesMap.quantity}}">
+            <input type="hidden" id="res-cond" value="{{.ProposedValuesMap.condition}}">
+            <input type="hidden" id="res-foil" value="{{.ProposedValuesMap.is_foil}}">
+            <input type="hidden" id="res-lang" value="{{.ProposedValuesMap.language}}">
+            <input type="hidden" id="res-target-set" name="set" value="{{.RawDataMap.set}}">
+
+            <label style="margin-bottom: 0.75rem; display: block;">
+                <input type="search" name="q" placeholder="Type to search..." autocomplete="off"
+                    value="{{.RawDataMap.name}}" hx-get="/api/search?mode=resolve&q_id={{.ID}}"
+                    hx-include="#res-target-set" hx-trigger="keyup changed delay:300ms, load, search"
+                    hx-target="#res-search-results" style="margin-bottom: 0;">
+            </label>
+
+            <div id="res-search-results"
+                style="max-height: 350px; overflow-y: auto; border: 1px solid var(--border-color); border-radius:var(--radius-sm); background: var(--bg-color); list-style: none; padding: 0;">
+                <!-- Results loaded here -->
+            </div>
+        </div>
+    </div>
+
+
+    <div id="res-confirmation"
+        style="display:none; margin-top:1.5rem; border-top:1px solid var(--border-color); padding-top:1.25rem; text-align:right;">
+        <!-- Resolution confirmation loaded here via resolve_select.html -->
+    </div>
+</article>
+<script>document.getElementById('resolve-modal').showModal()</script>

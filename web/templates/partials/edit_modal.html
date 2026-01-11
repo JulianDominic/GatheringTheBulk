@@ -1,0 +1,42 @@
+<article>
+    <header style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="margin-bottom: 0;">Edit Card</h3>
+        <button onclick="document.getElementById('edit-modal').close()"
+            style="border:none; background:none; cursor:pointer; font-size:0.9rem; padding:0.5rem; color:var(--text-secondary); width:auto; height:auto; text-decoration:underline;">Close</button>
+    </header>
+
+    <div class="edit-modal-content" style="display:flex; gap:2rem;">
+        <div style="flex-shrink:0; text-align:center;">
+            <img src="{{.ImageURI}}"
+                style="max-height:350px; width:auto; border-radius:8px; display:block; margin-bottom:1rem;">
+            <h4 style="margin-bottom:0.25rem;">{{.CardName}}</h4>
+            <small style="color:var(--text-secondary); text-transform: uppercase;">{{.SetCode}}
+                #{{.CollectorNumber}}</small>
+        </div>
+
+        <div style="flex-grow:1;">
+            <form hx-put="/inventory/{{.ID}}" hx-target="body" hx-swap="none">
+                <input type="hidden" name="location" value="{{.Location}}">
+                <label>Condition
+                    <select name="condition">
+                        <option value="NM" {{if eq .Condition "NM" }}selected{{end}}>Near Mint</option>
+                        <option value="LP" {{if eq .Condition "LP" }}selected{{end}}>Lightly Played</option>
+                        <option value="MP" {{if eq .Condition "MP" }}selected{{end}}>Moderately Played</option>
+                        <option value="HP" {{if eq .Condition "HP" }}selected{{end}}>Heavily Played</option>
+                        <option value="DMG" {{if eq .Condition "DMG" }}selected{{end}}>Damaged</option>
+                    </select>
+                </label>
+                <div class="grid">
+                    <label>Quantity <input type="number" name="quantity" value="{{.Quantity}}" min="1"></label>
+                    <label>Language <input type="text" name="language" value="{{.Language}}"></label>
+                </div>
+                <div style="margin-top: 1rem; margin-bottom: 1.5rem;">
+                    <label>Foil <input type="checkbox" name="is_foil" role="switch" {{if
+                            .IsFoil}}checked{{end}}></label>
+                </div>
+                <button type="submit">Update Card</button>
+            </form>
+        </div>
+    </div>
+</article>
+<script>document.getElementById('edit-modal').showModal()</script>

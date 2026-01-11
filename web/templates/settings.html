@@ -1,0 +1,30 @@
+{{define "content"}}
+<article>
+    <header>
+        <h2>Settings</h2>
+    </header>
+
+    <section>
+        <h4>Scryfall Synchronization</h4>
+        <p>
+            <strong>Last Synced:</strong>
+            <span id="last-sync-time" hx-get="/settings" hx-select="#last-sync-time" hx-target="this"
+                hx-swap="outerHTML" hx-trigger="scryfall-synced from:body">
+                {{if .LastSync}}{{.LastSync}}{{else}}Never{{end}}
+            </span>
+        </p>
+
+        <div id="sync-container">
+            <button hx-post="/api/jobs/sync" hx-target="#sync-container" hx-swap="innerHTML">
+                Update Card Database
+            </button>
+        </div>
+    </section>
+
+    <hr>
+    <section>
+        <h4>System Info</h4>
+        <p>Version: 0.1</p>
+    </section>
+</article>
+{{end}}

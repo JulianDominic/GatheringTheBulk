@@ -1,0 +1,32 @@
+<div class="edit-modal-content" style="display:flex; gap:2rem;">
+    <div style="flex-shrink:0; text-align:center;">
+        <img src="{{.ImageURI}}"
+            style="max-height:350px; width:auto; border-radius:8px; display:block; margin-bottom:1rem;">
+        <h4 style="margin-bottom:0.25rem;">{{.Name}}</h4>
+        <small style="color:var(--text-secondary); text-transform: uppercase;">{{.SetCode}}
+            #{{.CollectorNumber}}</small>
+    </div>
+
+    <div style="flex-grow:1;">
+        <form method="POST" action="/inventory">
+            <input type="hidden" name="scryfall_id" value="{{.ScryfallID}}">
+            <label>Condition
+                <select name="condition">
+                    <option value="NM">Near Mint</option>
+                    <option value="LP">Lightly Played</option>
+                    <option value="MP">Moderately Played</option>
+                    <option value="HP">Heavily Played</option>
+                    <option value="DMG">Damaged</option>
+                </select>
+            </label>
+            <div class="grid">
+                <label>Quantity <input type="number" name="quantity" value="1" min="1"></label>
+                <label>Language <input type="text" name="language" value="en"></label>
+            </div>
+            <div style="margin-top: 1rem; margin-bottom: 1.5rem;">
+                <label>Foil <input type="checkbox" name="is_foil" role="switch"></label>
+            </div>
+            <button type="submit">Save Card</button>
+        </form>
+    </div>
+</div>

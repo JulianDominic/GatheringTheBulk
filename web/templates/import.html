@@ -1,0 +1,51 @@
+{{define "content"}}
+<article>
+    <header>
+        <div class="tab-nav">
+            <a href="/import" class="tab-link {{if .IsUpload}}active{{end}}" hx-get="/import?tab=upload"
+                hx-target="main" hx-push-url="true">Upload CSV</a>
+            <a href="/import?tab=review" id="tab-link-review" class="tab-link {{if .IsReview}}active{{end}}"
+                hx-get="/import?tab=review" hx-target="main" hx-push-url="true">
+                Review Queue
+                <span id="review-badge" hx-get="/api/review/badge" hx-trigger="review-count-updated from:body"
+                    hx-target="this" hx-push-url="false" hx-swap="outerHTML"
+                    style="background-color: var(--danger); color: white; display: {{if gt .ReviewCount 0}}inline-flex{{else}}none{{end}}; align-items: center; justify-content: center; padding: 0 6px; border-radius: 12px; min-width: 20px; height: 20px; font-size: 11px; font-weight: bold; line-height: 1;">{{.ReviewCount}}</span>
+            </a>
+        </div>
+    </header>
+
+    {{if .IsUpload}}
+    <div id="upload-tab">
+        <section>
+            <p style="color: var(--text-primary);">Required columns: <code>Set, CN</code> OR <code>Name</code>.
+                Optional:
+                <code>Quantity, Condition, Foil, Language</code>.
+            </p>
+
+            <small><strong>Example Format:</strong></small>
+            <pre><code>set,cn,name,quantity,condition,foil,language
+mh2,1,,1,NM,true,en               <-- Precise Match (Set + CN)
+,,"Lightning Bolt",4,LP,false,en  <-- Name Match (Might trigger review)
+neo,254,,1,NM,true,jp             <-- Foreign Card (Japanese)</code></pre>
+
+            <form hx-encoding="multipart/form-data" hx-post="/api/jobs/import" hx-target="#import-status"
+                hx-on:htmx:before-request="this.querySelector('button').setAttribute('aria-busy', 'true'); this.querySelector('button').disabled = true;"
+                hx-on:htmx:after-request="this.querySelector('button').removeAttribute('aria-busy'); this.querySelector('button').disabled = false;">
+                <input type="file" name="csv_file" accept=".csv" required>
+                <button type="submit">Upload & Import</button>
+            </form>
+            <div id="import-status"></div>
+        </section>
+    </div>
+    {{else}}
+    <div id="review-tab">
+        <div hx-get="/review/content" hx-trigger="load, reveal" hx-swap="innerHTML">
+            <!-- Review content loads here -->
+            <p aria-busy="true" style="margin-top:1rem;">Loading Review Queue...</p>
+        </div>
+    </div>
+    {{end}}
+</article>
+
+
+{{end}}

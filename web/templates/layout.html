@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GatheringTheBulk</title>
+    <!-- Premium Vanilla CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><strong><a href="/">GatheringTheBulk</a></strong></li>
+                </ul>
+                <ul>
+                    <li><a href="/">Dashboard</a></li>
+                    <li><a href="/import">Import</a></li>
+                    <li><a href="/settings">Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+        {{template "content" .}}
+    </main>
+
+    <!-- Global Modals -->
+    <dialog id="add-modal">
+        <article>
+            <header style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin-bottom: 0;">Add to Collection</h3>
+                <button onclick="document.getElementById('add-modal').close()"
+                    style="border:none; background:none; cursor:pointer; font-size:0.9rem; padding:0.5rem; color:var(--text-secondary); width:auto; height:auto; text-decoration:underline;">Close</button>
+            </header>
+
+            <label>
+                Search by Name
+                <input type="search" name="q" placeholder="Type card name..." autocomplete="off" hx-get="/api/search"
+                    hx-trigger="keyup changed delay:300ms, search" hx-target="#search-results">
+            </label>
+
+            <ul id="search-results"
+                style="max-height: 250px; overflow-y: auto; list-style: none; padding: 0; margin-bottom: 1rem; border: 1px solid var(--border-color); display:none; border-radius: var(--radius-sm);">
+            </ul>
+            <script>
+                // This script needs to be resilient to potential re-initialization if needed
+                document.addEventListener('input', function (e) {
+                    if (e.target.matches('#add-modal input[name="q"]')) {
+                        document.getElementById('search-results').style.display = 'block';
+                    }
+                });
+            </script>
+
+            <div id="selected-card-container">
+                <!-- Details loaded via HTMX -->
+            </div>
+        </article>
+    </dialog>
+
+    <dialog id="edit-modal">
+        <!-- Content loaded via HTMX from edit_modal.html -->
+    </dialog>
+
+    <dialog id="resolve-modal">
+        <!-- Content loaded via HTMX from resolve_modal.html -->
+    </dialog>
+</body>
+
+
+</html>

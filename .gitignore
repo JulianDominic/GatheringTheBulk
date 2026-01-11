@@ -1,1 +1,3 @@
-GTB.db*
+*.db*
+*.exe
+*.csv
