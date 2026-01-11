@@ -1,5 +1,5 @@
 services:
-  GTB:
+  gtb:
     container_name: GatheringTheBulk
     build: .
     ports:
